@@ -1,8 +1,8 @@
 var and = okay.and;
 var array = okay.array;
 var boolean = okay.boolean;
-var callIf = okay.callIf;
-var callIfNot = okay.callIfNot;
+var invokeIf = okay.invokeIf;
+var invokeIfNot = okay.invokeIfNot;
 var createRule = okay.createRule;
 var date = okay.date;
 var gt = okay.gt;
@@ -68,22 +68,22 @@ describe('unit testing', function () {
     expect(boolean()(false)).to.be.true;
     expect(boolean()(true)).to.be.true;
   });
-  it('callIf', function () {
+  it('invokeIf', function () {
     var rule = sinon.stub().returns(true);
     var callback = sinon.spy();
     var context = {};
-    expect(callIf(rule, callback, context)(1)).to.be.true;
+    expect(invokeIf(rule, callback, context)(1)).to.be.true;
     expect(rule.calledOnce).to.be.true;
     expect(rule.calledWith(1)).to.be.true;
     expect(callback.calledOnce).to.be.true;
     expect(callback.calledWith(1)).to.be.true;
     expect(callback.calledOn(context)).to.be.true;
   });
-  it('callIfNot', function () {
+  it('invokeIfNot', function () {
     var rule = sinon.stub().returns(false);
     var callback = sinon.spy();
     var context = {};
-    expect(callIfNot(rule, callback, context)(1)).to.be.false;
+    expect(invokeIfNot(rule, callback, context)(1)).to.be.false;
     expect(rule.calledOnce).to.be.true;
     expect(rule.calledWith(1)).to.be.true;
     expect(callback.calledOnce).to.be.true;

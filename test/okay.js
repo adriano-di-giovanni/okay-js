@@ -71,7 +71,7 @@
     });
   };
 
-  var resolve$callIf = function resolve$callIf(value, param) {
+  var resolve$invokeIf = function resolve$invokeIf(value, param) {
     var rule = param.rule;
     var callback = param.callback;
     var context = param.context;
@@ -79,18 +79,18 @@
     returnValue && callback.call(context, value, rule.__param);
     return returnValue;
   };
-  exports.callIf = function callIf(rule, callback, context) {
+  exports.invokeIf = function invokeIf(rule, callback, context) {
     return createRule({
       param: {
         rule: rule,
         callback: callback,
         context: context
       },
-      resolve: resolve$callIf
+      resolve: resolve$invokeIf
     })
   };
 
-  var resolve$callIfNot = function resolve$callIfNot(value, param) {
+  var resolve$invokeIfNot = function resolve$invokeIfNot(value, param) {
     var rule = param.rule;
     var callback = param.callback;
     var context = param.context;
@@ -98,16 +98,18 @@
     ! returnValue && callback.call(context, value, rule.__param);
     return returnValue;
   };
-  exports.callIfNot = function callIfNot(rule, callback, context) {
+  exports.invokeIfNot = function invokeIfNot(rule, callback, context) {
     return createRule({
       param: {
         rule: rule,
         callback: callback,
         context: context
       },
-      resolve: resolve$callIfNot
+      resolve: resolve$invokeIfNot
     })
   };
+
+  exports.call =
 
   exports.array = function array() {
     return createRule({
