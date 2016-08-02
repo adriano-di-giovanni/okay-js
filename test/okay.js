@@ -109,7 +109,27 @@
     })
   };
 
-  exports.call =
+  var resolve$invoke = function resolve$invoke(value, param) {
+    var rule = param.rule;
+    var ifCallback = param.ifCallback;
+    var ifNotCallback = param.ifNotCallback;
+    var context = param.context;
+    var returnValue = rule(value);
+    var callback = returnValue ? ifCallback : ifNotCallback;
+    callback.call(context, value, rule.__param);
+    return returnValue;
+  };
+  exports.invoke = function invoke(rule, ifCallback, ifNotCallback, context) {
+    return createRule({
+      param: {
+        rule: rule,
+        ifCallback: ifCallback,
+        ifNotCallback: ifNotCallback,
+        context: context
+      },
+      resolve: resolve$invoke
+    });
+  };
 
   exports.array = function array() {
     return createRule({

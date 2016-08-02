@@ -1,6 +1,7 @@
 var and = okay.and;
 var array = okay.array;
 var boolean = okay.boolean;
+var invoke = okay.invoke;
 var invokeIf = okay.invokeIf;
 var invokeIfNot = okay.invokeIfNot;
 var createRule = okay.createRule;
@@ -67,6 +68,25 @@ describe('unit testing', function () {
     expect(boolean()()).to.be.false;
     expect(boolean()(false)).to.be.true;
     expect(boolean()(true)).to.be.true;
+  });
+  it('invoke', function () {
+    var rule = sinon.spy(function (value) {
+      return !! value;
+    });
+    var ifCallback = sinon.spy();
+    var ifNotCallback = sinon.spy();
+    var context = {};
+    expect(invoke(rule, ifCallback, ifNotCallback, context)(true)).to.be.true;
+    expect(rule.calledWith(true)).to.be.true;
+    expect(invoke(rule, ifCallback, ifNotCallback, context)(false)).to.be.false;
+    expect(rule.calledWith(false));
+    expect(rule.calledTwice).to.be.true;
+    expect(ifCallback.calledOnce).to.be.true;
+    expect(ifCallback.calledWith(true)).to.be.true;
+    expect(ifCallback.calledOn(context)).to.be.true;
+    expect(ifNotCallback.calledOnce).to.be.true;
+    expect(ifNotCallback.calledWith(false)).to.be.true;
+    expect(ifNotCallback.calledOn(context)).to.be.true;
   });
   it('invokeIf', function () {
     var rule = sinon.stub().returns(true);
