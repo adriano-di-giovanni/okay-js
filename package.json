@@ -1,0 +1,27 @@
+{
+  "name": "okay-js",
+  "version": "0.0.1",
+  "description": "A minimalistic functional validation library for Node.js and the browser",
+  "main": "test/okay.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "serve": "serve test"
+  },
+  "keywords": [
+    "functional",
+    "server",
+    "client",
+    "browser",
+    "form",
+    "validation"
+  ],
+  "author": "Adriano Di Giovanni <me@adrianodigiovanni.com> (http://adrianodigiovanni.com/)",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-eslint": "^6.1.2",
+    "eslint": "^3.2.2",
+    "serve": "^1.4.0"
+  }
+}
