@@ -1,6 +1,6 @@
 {
   "name": "okay-js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A minimalistic functional validation library for Node.js and the browser",
   "main": "test/okay.js",
   "directories": {

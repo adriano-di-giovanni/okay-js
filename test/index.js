@@ -6,12 +6,14 @@ var invokeIf = okay.invokeIf;
 var invokeIfNot = okay.invokeIfNot;
 var createRule = okay.createRule;
 var date = okay.date;
+var email = okay.email;
 var gt = okay.gt;
 var gte = okay.gte;
 var lt = okay.lt;
 var lte = okay.lte;
 var number = okay.number;
 var object = okay.object;
+var pattern = okay.pattern;
 var or = okay.or;
 var required = okay.required;
 var string = okay.string;
@@ -113,6 +115,10 @@ describe('unit testing', function () {
   it('date', function () {
     expect(date()()).to.be.false;
     expect(date()(new Date())).to.be.true;
+  });
+  it('email', function () {
+    expect(email()('a')).to.be.false;
+    expect(email()('a@a.it')).to.be.true;
   })
   it('gt', function () {
     expect(gt(0)(1)).to.be.true;
@@ -137,6 +143,10 @@ describe('unit testing', function () {
   it('object', function () {
     expect(object()()).to.be.false;
     expect(object()({})).to.be.true;
+  });
+  it('pattern', function () {
+    expect(pattern(/^\d*$/)('a')).to.be.false;
+    expect(pattern(/^\d*$/)('0123456789')).to.be.true;
   });
   it('or', function () {
     var rule1 = sinon.stub().returns(false);

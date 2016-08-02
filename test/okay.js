@@ -149,6 +149,17 @@
     });
   };
 
+  var emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  var resolve$email = function resolve$email(value, param) {
+    return param.test(value);
+  };
+  exports.email = function email() {
+    return createRule({
+      param: emailRegExp,
+      resolve: resolve$email
+    });
+  };
+
   var resolve$gt = function resolve$gt(value, param) {
     return value > param;
   };
@@ -198,6 +209,16 @@
   exports.object = function object() {
     return createRule({
       resolve: isObject
+    });
+  };
+
+  var resolve$pattern = function resolve$pattern(value, param) {
+    return param.test(value);
+  };
+  exports.pattern = function pattern(param) {
+    return createRule({
+      param: param,
+      resolve: resolve$pattern
     });
   };
 
