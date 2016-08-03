@@ -50,7 +50,7 @@
   var resolve$and = function resolve$and(value, param) {
     return reduce(compose.apply(null, param)(value), iteratee$and, true);
   };
-  exports.and = function and() {
+  exports.all = exports.and = function and() {
     return createRule({
       param: arguments,
       resolve: resolve$and
@@ -64,7 +64,7 @@
   var resolve$or = function resolve$or(value, param) {
     return reduce(compose.apply(null, param)(value), iteratee$or, false);
   };
-  exports.or = function or() {
+  exports.any = exports.or = function or() {
     return createRule({
       param: arguments,
       resolve: resolve$or
