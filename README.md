@@ -35,3 +35,9 @@ var callback = function (value) {
 var validate = callIfNot(string(), callback);
 console.log(validate(1)); // outputs `1 is not a string` then `false`
 ```
+
+## Random ideas
+
+* validation language
+* memoization
+* remove deps or make okay work with both underscore and lodash
