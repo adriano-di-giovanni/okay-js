@@ -41,3 +41,4 @@ console.log(validate(1)); // outputs `1 is not a string` then `false`
 * validation language
 * memoization
 * remove deps or make okay work with both underscore and lodash
+* asynchronous validation

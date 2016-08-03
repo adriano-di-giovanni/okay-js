@@ -20,6 +20,7 @@
   var isObject = _.isObject;
   var isString = _.isString;
   var map = _.map;
+  var partial = _.partial;
   var reduce = _.reduce;
   var toArray = _.toArray;
 
@@ -160,6 +161,16 @@
     });
   };
 
+  var resolve$eq = function resolve$eq(value, param) {
+    return value == param;
+  };
+  exports.eq = function eq(param) {
+    return createRule({
+      param: param,
+      resolve: resolve$eq
+    });
+  };
+
   var resolve$gt = function resolve$gt(value, param) {
     return value > param;
   };
@@ -211,6 +222,8 @@
       resolve: isObject
     });
   };
+
+  exports.partial = partial;
 
   var resolve$pattern = function resolve$pattern(value, param) {
     return param.test(value);

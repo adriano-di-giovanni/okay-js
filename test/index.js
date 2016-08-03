@@ -7,6 +7,7 @@ var invokeIfNot = okay.invokeIfNot;
 var createRule = okay.createRule;
 var date = okay.date;
 var email = okay.email;
+var eq = okay.eq;
 var gt = okay.gt;
 var gte = okay.gte;
 var lt = okay.lt;
@@ -119,6 +120,11 @@ describe('unit testing', function () {
   it('email', function () {
     expect(email()('a')).to.be.false;
     expect(email()('a@a.it')).to.be.true;
+  });
+  it('eq', function () {
+    expect(eq(0)('0')).to.be.true;
+    expect(eq(0)(0)).to.be.true;
+    expect(eq(0)(1)).to.be.false;
   })
   it('gt', function () {
     expect(gt(0)(1)).to.be.true;
