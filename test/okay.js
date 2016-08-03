@@ -27,106 +27,99 @@
   var createRule = exports.createRule = function createRule(descriptor) {
     var param = descriptor.param;
     var resolve = descriptor.resolve;
-    var rule = function (value) {
-      var _value = isFunction(value) ? value() : value;
-      var _param = isFunction(param) ? param() : param;
-      return resolve(_value, _param);
+    var rule = function (value, context) {
+      var _value = isFunction(value) ? value(context) : value;
+      var _param = isFunction(param) ? param(context) : param;
+      return resolve(_value, _param, context);
     };
-    rule.__param = param;
     return rule;
   };
 
   var compose = exports.compose = function compose() {
     var rules = toArray(arguments);
-    return function (value) {
+    return function (value, context) {
       return map(rules, function (rule) {
-        return rule(value);
+        return rule(value, context);
       });
     };
   };
 
-  var iteratee$and = function iteratee$and(previousValue, currentValue) {
+  var iteratee$all = function iteratee$all(previousValue, currentValue) {
     return previousValue && currentValue;
   };
-  var resolve$and = function resolve$and(value, param) {
-    return reduce(compose.apply(null, param)(value), iteratee$and, true);
+  var resolve$all = function resolve$all(value, param, context) {
+    return reduce(compose.apply(null, param)(value, context), iteratee$all, true);
   };
-  exports.all = exports.and = function and() {
+  exports.all = function and() {
     return createRule({
       param: arguments,
-      resolve: resolve$and
+      resolve: resolve$all
     });
   };
 
 
-  var iteratee$or = function iteratee$or(previousValue, currentValue) {
+  var iteratee$any = function iteratee$any(previousValue, currentValue) {
     return previousValue || currentValue;
   };
-  var resolve$or = function resolve$or(value, param) {
-    return reduce(compose.apply(null, param)(value), iteratee$or, false);
+  var resolve$any = function resolve$any(value, param, context) {
+    return reduce(compose.apply(null, param)(value, context), iteratee$any, false);
   };
-  exports.any = exports.or = function or() {
+  exports.any = function or() {
     return createRule({
       param: arguments,
-      resolve: resolve$or
+      resolve: resolve$any
     });
   };
 
-  var resolve$invokeIf = function resolve$invokeIf(value, param) {
+  var resolve$invokeIf = function resolve$invokeIf(value, param, context) {
     var rule = param.rule;
     var callback = param.callback;
-    var context = param.context;
     var returnValue = rule(value);
-    returnValue && callback.call(context, value, rule.__param);
+    returnValue && callback(value, context);
     return returnValue;
   };
-  exports.invokeIf = function invokeIf(rule, callback, context) {
+  exports.invokeIf = function invokeIf(rule, callback) {
     return createRule({
       param: {
         rule: rule,
-        callback: callback,
-        context: context
+        callback: callback
       },
       resolve: resolve$invokeIf
     })
   };
 
-  var resolve$invokeIfNot = function resolve$invokeIfNot(value, param) {
+  var resolve$invokeIfNot = function resolve$invokeIfNot(value, param, context) {
     var rule = param.rule;
     var callback = param.callback;
-    var context = param.context;
     var returnValue = rule(value);
-    ! returnValue && callback.call(context, value, rule.__param);
+    ! returnValue && callback(value, context);
     return returnValue;
   };
-  exports.invokeIfNot = function invokeIfNot(rule, callback, context) {
+  exports.invokeIfNot = function invokeIfNot(rule, callback) {
     return createRule({
       param: {
         rule: rule,
-        callback: callback,
-        context: context
+        callback: callback
       },
       resolve: resolve$invokeIfNot
     })
   };
 
-  var resolve$invoke = function resolve$invoke(value, param) {
+  var resolve$invoke = function resolve$invoke(value, param, context) {
     var rule = param.rule;
     var ifCallback = param.ifCallback;
     var ifNotCallback = param.ifNotCallback;
-    var context = param.context;
     var returnValue = rule(value);
     var callback = returnValue ? ifCallback : ifNotCallback;
-    callback.call(context, value, rule.__param);
+    callback(value, context);
     return returnValue;
   };
-  exports.invoke = function invoke(rule, ifCallback, ifNotCallback, context) {
+  exports.invoke = function invoke(rule, ifCallback, ifNotCallback) {
     return createRule({
       param: {
         rule: rule,
         ifCallback: ifCallback,
-        ifNotCallback: ifNotCallback,
-        context: context
+        ifNotCallback: ifNotCallback
       },
       resolve: resolve$invoke
     });

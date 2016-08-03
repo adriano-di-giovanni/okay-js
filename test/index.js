@@ -1,4 +1,4 @@
-var and = okay.and;
+var all = okay.all;
 var array = okay.array;
 var boolean = okay.boolean;
 var invoke = okay.invoke;
@@ -15,7 +15,7 @@ var lte = okay.lte;
 var number = okay.number;
 var object = okay.object;
 var pattern = okay.pattern;
-var or = okay.or;
+var any = okay.any;
 var required = okay.required;
 var string = okay.string;
 
@@ -33,7 +33,6 @@ describe('unit testing', function () {
     });
     var value = 1;
     expect(validate).to.be.a.function;
-    expect(validate.__param).to.equal(param);
     expect(validate(value)).to.be.true;
     expect(_resolve.calledOnce).to.be.true;
     expect(_resolve.calledWith(value, param)).to.be.true;
@@ -51,11 +50,11 @@ describe('unit testing', function () {
     expect(_resolve.calledOnce).to.be.true;
     expect(_resolve.calledWith(value, param())).to.be.true;
   });
-  it('and', function () {
+  it('all', function () {
     var rule1 = sinon.stub().returns(true);
     var rule2 = sinon.stub().returns(false);
 
-    var validate = and(rule1, rule2);
+    var validate = all(rule1, rule2);
     expect(validate).to.be.a.function;
     expect(validate(1)).to.be.false;
     expect(rule1.calledOnce).to.be.true;
@@ -79,39 +78,35 @@ describe('unit testing', function () {
     var ifCallback = sinon.spy();
     var ifNotCallback = sinon.spy();
     var context = {};
-    expect(invoke(rule, ifCallback, ifNotCallback, context)(true)).to.be.true;
+    expect(invoke(rule, ifCallback, ifNotCallback)(true, context)).to.be.true;
     expect(rule.calledWith(true)).to.be.true;
-    expect(invoke(rule, ifCallback, ifNotCallback, context)(false)).to.be.false;
-    expect(rule.calledWith(false));
+    expect(invoke(rule, ifCallback, ifNotCallback)(false, context)).to.be.false;
+    expect(rule.calledWith(false, context));
     expect(rule.calledTwice).to.be.true;
     expect(ifCallback.calledOnce).to.be.true;
-    expect(ifCallback.calledWith(true)).to.be.true;
-    expect(ifCallback.calledOn(context)).to.be.true;
+    expect(ifCallback.calledWith(true, context)).to.be.true;
     expect(ifNotCallback.calledOnce).to.be.true;
     expect(ifNotCallback.calledWith(false)).to.be.true;
-    expect(ifNotCallback.calledOn(context)).to.be.true;
   });
   it('invokeIf', function () {
     var rule = sinon.stub().returns(true);
     var callback = sinon.spy();
     var context = {};
-    expect(invokeIf(rule, callback, context)(1)).to.be.true;
+    expect(invokeIf(rule, callback)(1)).to.be.true;
     expect(rule.calledOnce).to.be.true;
     expect(rule.calledWith(1)).to.be.true;
     expect(callback.calledOnce).to.be.true;
     expect(callback.calledWith(1)).to.be.true;
-    expect(callback.calledOn(context)).to.be.true;
   });
   it('invokeIfNot', function () {
     var rule = sinon.stub().returns(false);
     var callback = sinon.spy();
     var context = {};
-    expect(invokeIfNot(rule, callback, context)(1)).to.be.false;
+    expect(invokeIfNot(rule, callback)(1)).to.be.false;
     expect(rule.calledOnce).to.be.true;
     expect(rule.calledWith(1)).to.be.true;
     expect(callback.calledOnce).to.be.true;
     expect(callback.calledWith(1)).to.be.true;
-    expect(callback.calledOn(context)).to.be.true;
   });
   it('date', function () {
     expect(date()()).to.be.false;
@@ -154,11 +149,11 @@ describe('unit testing', function () {
     expect(pattern(/^\d*$/)('a')).to.be.false;
     expect(pattern(/^\d*$/)('0123456789')).to.be.true;
   });
-  it('or', function () {
+  it('any', function () {
     var rule1 = sinon.stub().returns(false);
     var rule2 = sinon.stub().returns(true);
 
-    var validate = or(rule1, rule2);
+    var validate = any(rule1, rule2);
     expect(validate).to.be.a.function;
     expect(validate(1)).to.be.true;
     expect(rule1.calledOnce).to.be.true;
