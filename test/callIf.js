@@ -22,5 +22,19 @@ module.exports = function () {
         callIf(noop, null, {});
       }).to.throw('`elseCallback` is not a function');
     });
+    it('should call `rule` and `thenCallback`', function () {
+      var rule = sinon.stub().returns(true);
+      var thenCallback = sinon.spy();
+      callIf(rule, thenCallback)();
+      expect(rule).to.have.been.calledOnce;
+      expect(thenCallback).to.have.been.calledOnce;
+    });
+    it('should call `rule` and `elseCallback`', function () {
+      var rule = sinon.stub().returns(false);
+      var elseCallback = sinon.spy();
+      callIf(rule, null, elseCallback)();
+      expect(rule).to.have.been.calledOnce;
+      expect(elseCallback).to.have.been.calledOnce;
+    });
   });
 };

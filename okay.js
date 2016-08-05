@@ -97,7 +97,7 @@
     if (thenCallback != null && !isFunction(thenCallback)) {
       throw new Error('`thenCallback` is not a function');
     }
-    if (elseCallback != null && !isFunction(thenCallback)) {
+    if (elseCallback != null && !isFunction(elseCallback)) {
       throw new Error('`elseCallback` is not a function');
     }
     return createRule(_resolveCallIf, arguments);
