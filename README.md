@@ -2,9 +2,7 @@
 
 A minimalistic functional validation library for Node.js and the browser.
 
-It's a proof of concept. It's in alpha. It depends on [underscore.js](http://underscorejs.org/).
-
-## Installation
+It's a proof of concept. It's in alpha. It depends on [lodash](https://lodash.com/).
 
 ## Examples
 

@@ -1,13 +1,15 @@
 {
   "name": "okay-js",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A minimalistic functional validation library for Node.js and the browser",
   "main": "test/okay.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "serve": "serve test"
+    "test-node": "mocha --reporter spec test/index.js",
+    "minify": "uglifyjs okay.js --compress --mangle",
+    "build": "npm run minify -- --source-map okay.min.map --output okay.min.js"
   },
   "keywords": [
     "functional",
@@ -20,8 +22,14 @@
   "author": "Adriano Di Giovanni <me@adrianodigiovanni.com> (http://adrianodigiovanni.com/)",
   "license": "MIT",
   "devDependencies": {
-    "babel-eslint": "^6.1.2",
+    "chai": "^3.5.0",
     "eslint": "^3.2.2",
-    "serve": "^1.4.0"
+    "eslint-config-standard": "^5.3.5",
+    "eslint-plugin-promise": "^2.0.0",
+    "eslint-plugin-standard": "^2.0.0",
+    "lodash": "^4.14.1",
+    "mocha": "^3.0.1",
+    "sinon": "^1.17.5",
+    "uglify-js": "^2.7.0"
   }
 }
