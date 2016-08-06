@@ -2,10 +2,7 @@
   "name": "okay-js",
   "version": "0.0.7",
   "description": "A minimalistic functional validation library for Node.js and the browser",
-  "main": "test/okay.js",
-  "directories": {
-    "test": "test"
-  },
+  "main": "./okay.js",
   "scripts": {
     "test-browser": "karma start karma.conf.js",
     "test-node": "mocha --reporter spec --require test/index.js test/unit/*.js",
