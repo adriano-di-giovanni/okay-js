@@ -7,7 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "test-node": "mocha --reporter spec test/index.js",
+    "test-browser": "karma start karma.conf.js",
+    "test-node": "mocha --reporter spec --require test/index.js test/unit/*.js",
     "minify": "uglifyjs okay.js --compress --mangle",
     "build": "npm run minify -- --source-map okay.min.map --output okay.min.js",
     "coverage": "nyc npm run test-node && nyc report"
@@ -28,6 +29,12 @@
     "eslint-config-standard": "^5.3.5",
     "eslint-plugin-promise": "^2.0.0",
     "eslint-plugin-standard": "^2.0.0",
+    "karma": "^1.1.2",
+    "karma-chai": "^0.1.0",
+    "karma-mocha": "^1.1.1",
+    "karma-phantomjs-launcher": "^1.0.1",
+    "karma-sinon": "^1.0.5",
+    "karma-sinon-chai": "^1.2.3",
     "lodash": "^4.14.1",
     "mocha": "^3.0.1",
     "nyc": "^7.1.0",
