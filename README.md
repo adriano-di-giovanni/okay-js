@@ -13,7 +13,7 @@ It is tiny (< 1kB).
 ## Installation
 
 ```
-npm install okay --save
+npm install okay-js --save
 ```
 
 ## Usage
