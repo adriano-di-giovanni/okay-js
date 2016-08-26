@@ -1,3 +1,4 @@
+/** @module */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(['lodash'], function (_) {
@@ -25,7 +26,20 @@
   var reduce = _.reduce;
   var toArray = _.toArray;
 
-  var createRule = exports.createRule = function createRule(resolve, param) {
+  /**
+   * Creates a rule. Okay's rule creators wrap this method. You can use it to create your own rules.
+   * @param {Function} resolve - A function defining the validation logic for the rule.
+   * It is invoked with three arguments: `(value, param, context)`.
+   * While `value` and `context` are from the rule invokation, `param` is from the creator invokation.
+   * The `resolve` function must return a `Boolean` value.
+   * @param {*} param - It is to be checked against `value` according to the validation logic
+   * expressed by `resolve` function. If `param` is a function, it gets executed in order to get
+   * the actual value.
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`.
+   */
+  exports.createRule = function createRule(resolve, param) {
     if (!isFunction(resolve)) {
       throw new Error('`resolve` argument is missing or is not a function');
     }
@@ -42,6 +56,7 @@
     };
     return rule;
   };
+  var createRule = exports.createRule;
 
   var _iterateeCompose = function _iterateeCompose(rule) {
     return isFunction(rule);
@@ -67,7 +82,24 @@
   var _resolveAll = function _resolveAll(value, param, context) {
     return reduce(compose.apply(null, param)(value, context), _iterateeAll, true);
   };
-  exports.all = function and() {
+  /**
+   * Rule creator. The created rule checks the given value against all rules and acts as a logical AND.
+   *
+   * @param {...Function} rules
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`.
+   *
+   * @example
+   * var gt = okay.gt;
+   * var lt = okay.lt;
+   * var all = okay.all;
+   * var validate = all(gt(0), lt(5));
+   * console.log(validate(-1)); // false
+   * console.log(validate(6)); // false
+   * console.log(validate(3)); // true
+   */
+  exports.all = function all() {
     return createRule(_resolveAll, arguments);
   };
 
@@ -77,7 +109,16 @@
   var _resolveAny = function _resolveAny(value, param, context) {
     return reduce(compose.apply(null, param)(value, context), _iterateeAny, false);
   };
-  exports.any = function or() {
+  /**
+   * Rule creator. The created rule checks the given value against all rules and acts as a logical OR.
+   *
+   * @param {...Function} rules
+   * @returns {Function} the rule function
+   *
+   * @example
+   * var any = okay.any;
+   */
+  exports.any = function any() {
     return createRule(_resolveAny, arguments);
   };
 
@@ -90,6 +131,37 @@
     callback(value, context);
     return result;
   };
+  /**
+   * Rule creator. The created rule checks the given value against `rule` and
+   * calls `thenCallback` if value is valid. Otherwise, it calls `elseCallback`.
+   *
+   * @param {Function} rule
+   * @param {?Function} thenCallback - A function that's invoked if `rule`
+   * validates the value given to `callIf`. `thenCallback` is invoked with two
+   * arguments: `(value, context)`.
+   * @param {?Function} elseCallback - A function that's invoked if `rule`
+   * doesn't validate the value given to `callIf`. `elseCallback` is invoked
+   * with two arguments: `(value, context)`.
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`.
+   *
+   * @example
+   * var string = okay.string;
+   * var thenCallback = function (value) {
+   *   var message = ':value is a string'
+   *     .replace(':value', value);
+   *   console.log(message);
+   * };
+   * var elseCallback = function (value) {
+   *   var message = ':value is not a string'
+   *     .replace(':value', value);
+   *   console.log(message);
+   * };
+   * var validate = callIf(string(), thenCallback, elseCallback);
+   * validate('1'); // 1 is a string
+   * validate(1); // 1 is not a string
+   */
   exports.callIf = function callIf(rule, thenCallback, elseCallback) {
     if (!isFunction(rule)) {
       throw new Error('`rule` is not a function');
@@ -103,14 +175,49 @@
     return createRule(_resolveCallIf, arguments);
   };
 
+  /**
+   * Rule creator. The created rule validates that a value is an array
+   *
+   * @returns {Function} the rule function
+   *
+   * @example
+   * var array = okay.array;
+   * var validate = array();
+   * console.log(validate({})); // false
+   * console.log(validate([])); // true
+   */
   exports.array = function array() {
     return createRule(isArray);
   };
 
+  /**
+   * Rule creator. The created rule validates that a value is a boolean
+   *
+   * @returns {Function} the rule function
+   *
+   * @example
+   * var boolean = okay.boolean;
+   * var validate = boolean();
+   * console.log(validate(0)); // false
+   * console.log(validate(false)); // true
+   */
   exports.boolean = function boolean() {
     return createRule(isBoolean);
   };
 
+  /**
+   * Rule creator. The created rule validates that a value is a Javascript Date object
+   *
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`.
+   *
+   * @example
+   * var date = okay.date;
+   * var validate = date();
+   * console.log(validate({})); // false
+   * console.log(validate(new Date())); // true
+   */
   exports.date = function date() {
     return createRule(isDate);
   };
@@ -119,6 +226,19 @@
   var _email = function _email(value, param) {
     return param.test(value);
   };
+  /**
+   * Rule creator. The created rule validates that a value is a valid email address.
+   *
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`.
+   *
+   * @example
+   * var email = okay.email;
+   * var validate = email();
+   * console.log(validate('string')); // false
+   * console.log(validate('user@domain.com')); // true
+   */
   exports.email = function email() {
     return createRule(_email, emailRegExp);
   };
@@ -126,6 +246,20 @@
   var _eq = function _eq(value, param) {
     return value == param;
   };
+  /**
+   * Rule creator. The created rule validates that a number is equal to a value.
+   *
+   * @param {Number|Function} param - A number or a function returning a number.
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`.
+   *
+   * @example
+   * var eq = okay.eq;
+   * var validate = eq(5);
+   * console.log(validate(6)); // false
+   * console.log(validate(5)); // true
+   */
   exports.eq = function eq(param) {
     return createRule(_eq, param);
   };
@@ -133,6 +267,20 @@
   var _gt = function _gt(value, param) {
     return value > param;
   };
+  /**
+   * Rule creator. The created rule validates that a number is less than or equal to a value.
+   *
+   * @param {Number|Function} param - A number or a function returning a number.
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`.
+   *
+   * @example
+   * var gt = okay.gt;
+   * var validate = gt(5);
+   * console.log(validate(5)); // false
+   * console.log(validate(6)); // true
+   */
   exports.gt = function gt(param) {
     if (param == null) {
       throw new Error('`param` is missing');
@@ -143,6 +291,21 @@
   var _gte = function _gte(value, param) {
     return value >= param;
   };
+  /**
+   * Rule creator. The created rule validates that a number is greater than or equal to a value
+   *
+   * @param {Number|Function} param - A value or a function returning a number
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`.
+   *
+   * @example
+   * var gte = okay.gte;
+   * var validate = gte(5);
+   * console.log(validate(4)); // false
+   * console.log(validate(5)); // true
+   * console.log(validate(6)); // true
+   */
   exports.gte = function gte(param) {
     if (param == null) {
       throw new Error('`param` is missing');
@@ -153,6 +316,20 @@
   var _lt = function _lt(value, param) {
     return value < param;
   };
+  /**
+   * Rule creator. The created rule validates that a number is less than a value
+   *
+   * @param {Number|Function} param - A number or a function returning a number
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`.
+   *
+   * @example
+   * var lt = okay.lt;
+   * var validate = lt(5);
+   * console.log(validate(5)); // false
+   * console.log(validate(4)); // true
+   */
   exports.lt = function lt(param) {
     if (param == null) {
       throw new Error('`param` is missing');
@@ -163,6 +340,21 @@
   var _lte = function _lte(value, param) {
     return value <= param;
   };
+  /**
+   * Rule creator. The created rule validates that a number is less than or equal to a value
+   *
+   * @param {Number|Function} param - A number or a function returning a number.
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`.
+   *
+   * @example
+   * var lte = okay.lte;
+   * var validate = lte(5);
+   * console.log(validate(6)); // false
+   * console.log(validate(5)); // true
+   * console.log(validate(4)); // true
+   */
   exports.lte = function lte(param) {
     if (param == null) {
       throw new Error('`param` is missing');
@@ -170,10 +362,36 @@
     return createRule(_lte, param);
   };
 
+  /**
+   * Rule creator. The created rule validates that a value is a number.
+   *
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`..
+   *
+   * @example
+   * var object = okay.number;
+   * var validate = number();
+   * console.log(validate('a')); // false
+   * console.log(validate(1)); // true
+   */
   exports.number = function number() {
     return createRule(isNumber);
   };
 
+  /**
+   * Rule creator. The created rule validates that a value is an object.
+   *
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`..
+   *
+   * @example
+   * var object = okay.object;
+   * var validate = object();
+   * console.log(validate(1)); // false
+   * console.log(validate({})); // true
+   */
   exports.object = function object() {
     return createRule(isObject);
   };
@@ -183,6 +401,20 @@
   var _pattern = function _pattern(value, param) {
     return param.test(value);
   };
+  /**
+   * Rule creator. The created rule validates that a value matches a regular expression.
+   *
+   * @param {RegExp|Function} param - A regular expression or a function returning a regular expression.
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`.
+   *
+   * @example
+   * var pattern = okay.pattern;
+   * var validate = pattern(/[0-9]/);
+   * console.log(validate('a')); // false
+   * console.log(validate('1')); // true
+   */
   exports.pattern = function pattern(param) {
     if (!isRegExp(param)) {
       throw new Error('`param` is not a regular expression');
@@ -193,10 +425,38 @@
   var _required = function _required(value) {
     return value != null && value !== '';
   };
+  /**
+   * Rule creator. The created rule validates that a value is non-blank.
+   *
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`..
+   *
+   * @example
+   * var required = okay.required;
+   * var validate = required();
+   * console.log(validate(null)); // false
+   * console.log(validate(void 0)); // false
+   * console.log(validate('')); // false
+   * console.log(validate(false)); // true
+   */
   exports.required = function required() {
     return createRule(_required);
   };
 
+  /**
+   * Rule creator. The created rule validates that a given value is a string.
+   *
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`..
+   *
+   * @example
+   * var string = okay.string;
+   * var validate = string();
+   * console.log(validate('1')); // true
+   * console.log(validate(1)); // false
+   */
   exports.string = function string() {
     return createRule(isString);
   };

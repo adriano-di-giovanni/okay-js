@@ -4,11 +4,13 @@
   "description": "A minimalistic functional validation library for Node.js and the browser",
   "main": "./okay.js",
   "scripts": {
+    "docs": "jsdoc2md okay.js --template README.hbs > README.md",
     "test-browser": "karma start karma.conf.js",
     "test-node": "mocha --reporter spec --require test/index.js test/unit/*.js",
     "minify": "uglifyjs okay.js --compress --mangle",
     "build": "npm run minify -- --source-map okay.min.map --output okay.min.js",
-    "coverage": "nyc npm run test-node && nyc report"
+    "coverage": "nyc npm run test-node && nyc report",
+    "weight": "npm run minify | gzip-size | pretty-bytes"
   },
   "keywords": [
     "functional",
@@ -26,6 +28,8 @@
     "eslint-config-standard": "^5.3.5",
     "eslint-plugin-promise": "^2.0.0",
     "eslint-plugin-standard": "^2.0.0",
+    "gzip-size-cli": "^1.0.0",
+    "jsdoc-to-markdown": "^1.3.7",
     "karma": "^1.1.2",
     "karma-chai": "^0.1.0",
     "karma-mocha": "^1.1.1",
@@ -35,6 +39,7 @@
     "lodash": "^4.14.1",
     "mocha": "^3.0.1",
     "nyc": "^7.1.0",
+    "pretty-bytes-cli": "^1.0.0",
     "sinon": "^1.17.5",
     "uglify-js": "^2.7.0"
   }
