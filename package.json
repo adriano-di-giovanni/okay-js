@@ -1,5 +1,5 @@
 {
-  "name": "okay-js",
+  "name": "okay",
   "version": "0.0.7",
   "description": "A minimalistic functional validation library for Node.js and the browser",
   "main": "./okay.js",
