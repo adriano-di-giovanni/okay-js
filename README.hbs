@@ -83,7 +83,7 @@ validate(1); // 1 is not a string
 
 You can create your own custom rules using <code>[okay.createRule](#module_okay.createRule)</code>
 
-```
+```javascript
 var createRule = okay.createRule;
 
 var resolve = function (value, param) {
