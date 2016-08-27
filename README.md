@@ -35,7 +35,7 @@ console.log(validate(6)); // true
 console.log(validate(5)); // false
 ```
 
-In the example above, <code>[okay.gt](#module_okay.gt)</code> is a rule creator. We call `gt(5)` in order to create a rule. The rule validates that a given value is greater than or equal to 5.
+In the example above, <code>[okay.gt](#module_okay.gt)</code> is a rule creator. We call `gt(5)` in order to create a rule. The rule validates that a given value is greater than 5.
 
 ### Composing rules
 
@@ -62,6 +62,7 @@ You can use the rule creator <code>[okay.callIf](#module_okay.callIf)</code> to 
 Let's see an example:
 
 ```javascript
+var callIf = okay.callIf;
 var string = okay.string;
 var thenCallback = function (value) {
   var message = ':value is a string'
