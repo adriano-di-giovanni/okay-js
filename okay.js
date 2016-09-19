@@ -461,5 +461,49 @@
     return createRule(isString);
   };
 
+  var _countries = [
+    'it'
+  ];
+  var _italianTaxCodeRegExp = /^[A-Z]{6}[0-9]{2}[ABCDEHLMPRST]{1}[0-9]{2}[A-Z]{1}[0-9]{3}[A-Z]{1}$/i;
+  var _isItalianTaxCode = function _isItalianTaxCode(value) {
+    if (!isString(value)) {
+      return false;
+    }
+    if (!_italianTaxCodeRegExp.test(value)) {
+      return false;
+    }
+    return true;
+  };
+  function _taxCode(value, param) {
+    switch (param) {
+      case 'it':
+        return _isItalianTaxCode(value);
+      default:
+    }
+  }
+  /**
+   * Rule creator. The created rule validates that a given value is a tax code.
+   *
+   * @param {String|Function} param - A ISO 3166 alpha-2 country code or a
+   * function returning a ISO 3166 alpha-2 country code
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a `Boolean`.
+   *
+   * @example
+   * var taxCode = okay.taxCode;
+   * var validate = taxCode('it');
+   * console.log(validate('DGVDRN78E02H501C')); // true
+   */
+  exports.taxCode = function taxCode(param) {
+    if (!isString(param)) {
+      throw new Error('`param` is not a string');
+    }
+    var _param = param.toLowerCase();
+    if (_param.length !== 2 || _countries.indexOf(_param) === -1) {
+      throw new Error('`param` is not an ISO 3166 alpha-2 country code');
+    }
+    return createRule(_taxCode, _param);
+  };
+
   return exports;
 }));

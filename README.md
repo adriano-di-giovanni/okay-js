@@ -120,6 +120,7 @@ console.log(validate(4)); // true
     * [.pattern(param)](#module_okay.pattern) ⇒ <code>function</code>
     * [.required()](#module_okay.required) ⇒ <code>function</code>
     * [.string()](#module_okay.string) ⇒ <code>function</code>
+    * [.taxCode(param)](#module_okay.taxCode) ⇒ <code>function</code>
 
 <a name="module_okay.createRule"></a>
 
@@ -463,4 +464,23 @@ var string = okay.string;
 var validate = string();
 console.log(validate('1')); // true
 console.log(validate(1)); // false
+```
+<a name="module_okay.taxCode"></a>
+
+### okay.taxCode(param) ⇒ <code>function</code>
+Rule creator. The created rule validates that a given value is a tax code.
+
+**Kind**: static method of <code>[okay](#module_okay)</code>  
+**Returns**: <code>function</code> - The rule function. It has to be invoked with a
+mandatory `value` argument and an optional `context`. It always returns a `Boolean`.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| param | <code>String</code> &#124; <code>function</code> | A ISO 3166 alpha-2 country code or a function returning a ISO 3166 alpha-2 country code |
+
+**Example**  
+```js
+var taxCode = okay.taxCode;
+var validate = taxCode('it');
+console.log(validate('DGVDRN78E02H501C')); // true
 ```
