@@ -123,6 +123,30 @@
     return createRule(_resolveAny, arguments);
   };
 
+  var _resolveNot = function _resolveNot(value, param, context) {
+    var rule = param[0];
+    var result = rule(value, context);
+    return !result;
+  };
+  /**
+   * Rule creator. The created rule checks the given value against the param rule and acts as a logical NOT.
+   *
+   * @param {Function} rule
+   * @returns {Function} the rule function
+   *
+   * @example
+   * var required = okay.required;
+   * var not = okay.not;
+   * var validate = not(required());
+   * console.log(validate(null)); // true
+   */
+  exports.not = function not(param) {
+    if (!isFunction(param)) {
+      throw new Error('`rule` is not a function');
+    }
+    return createRule(_resolveNot, [param]);
+  };
+
   var _resolveCallIf = function _resolveCallIf(value, param, context) {
     var rule = param[0];
     var thenCallback = param[1];

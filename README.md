@@ -105,6 +105,7 @@ console.log(validate(4)); // true
     * [.createRule(resolve, param)](#module_okay.createRule) ⇒ <code>function</code>
     * [.all(...rules)](#module_okay.all) ⇒ <code>function</code>
     * [.any(...rules)](#module_okay.any) ⇒ <code>function</code>
+    * [.not(rule)](#module_okay.not) ⇒ <code>function</code>
     * [.callIf(rule, thenCallback, elseCallback)](#module_okay.callIf) ⇒ <code>function</code>
     * [.array()](#module_okay.array) ⇒ <code>function</code>
     * [.boolean()](#module_okay.boolean) ⇒ <code>function</code>
@@ -177,6 +178,25 @@ Rule creator. The created rule checks the given value against all rules and acts
 **Example**  
 ```js
 var any = okay.any;
+```
+<a name="module_okay.not"></a>
+
+### okay.not(rule) ⇒ <code>function</code>
+Rule creator. The created rule checks the given value against the param rule and acts as a logical NOT.
+
+**Kind**: static method of <code>[okay](#module_okay)</code>  
+**Returns**: <code>function</code> - the rule function  
+
+| Param | Type |
+| --- | --- |
+| rule | <code>function</code> | 
+
+**Example**  
+```js
+var required = okay.required;
+var not = okay.not;
+var validate = not(required());
+console.log(validate(null)); // true
 ```
 <a name="module_okay.callIf"></a>
 
