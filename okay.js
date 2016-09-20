@@ -16,6 +16,7 @@
   var isArray = _.isArray;
   var isBoolean = _.isBoolean;
   var isDate = _.isDate;
+  var isEmpty = _.isEmpty;
   var isFunction = _.isFunction;
   var isNumber = _.isNumber;
   var isObject = _.isObject;
@@ -241,6 +242,26 @@
    */
   exports.email = function email() {
     return createRule(_email, emailRegExp);
+  };
+
+  /**
+   * Rule creator. The created rule validates that a value is a number.
+   *
+   * @returns {Function} The rule function. It has to be invoked with a
+   * mandatory `value` argument and an optional `context`. It always returns a
+   * `Boolean`..
+   *
+   * @example
+   * var object = okay.empty;
+   * var validate = empty();
+   * console.log(validate(null)); // true
+   * console.log(validate(true)); // true
+   * console.log(validate(1)); // true
+   * console.log(validate([1, 2, 3])); // false
+   * console.log(validate({ a: 1 })); // false
+   */
+  exports.empty = function empty() {
+    return createRule(isEmpty);
   };
 
   var _eq = function _eq(value, param) {

@@ -1,6 +1,6 @@
 {
   "name": "okay-js",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "A minimalistic functional validation library for Node.js and the browser",
   "main": "./okay.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "minify": "uglifyjs okay.js --compress --mangle",
     "build": "npm run minify -- --source-map okay.min.map --output okay.min.js",
     "coverage": "nyc npm run test-node && nyc report",
-    "weight": "npm run minify | gzip-size | pretty-bytes"
+    "weight": "npm run minify | gzip-size | pretty-bytes",
+    "prepublish": "npm run test-node && npm run test-browser && npm run build"
   },
   "keywords": [
     "functional",

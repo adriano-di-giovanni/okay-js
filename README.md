@@ -110,6 +110,7 @@ console.log(validate(4)); // true
     * [.boolean()](#module_okay.boolean) ⇒ <code>function</code>
     * [.date()](#module_okay.date) ⇒ <code>function</code>
     * [.email()](#module_okay.email) ⇒ <code>function</code>
+    * [.empty()](#module_okay.empty) ⇒ <code>function</code>
     * [.eq(param)](#module_okay.eq) ⇒ <code>function</code>
     * [.gt(param)](#module_okay.gt) ⇒ <code>function</code>
     * [.gte(param)](#module_okay.gte) ⇒ <code>function</code>
@@ -270,6 +271,25 @@ var email = okay.email;
 var validate = email();
 console.log(validate('string')); // false
 console.log(validate('user@domain.com')); // true
+```
+<a name="module_okay.empty"></a>
+
+### okay.empty() ⇒ <code>function</code>
+Rule creator. The created rule validates that a value is a number.
+
+**Kind**: static method of <code>[okay](#module_okay)</code>  
+**Returns**: <code>function</code> - The rule function. It has to be invoked with a
+mandatory `value` argument and an optional `context`. It always returns a
+`Boolean`..  
+**Example**  
+```js
+var object = okay.empty;
+var validate = empty();
+console.log(validate(null)); // true
+console.log(validate(true)); // true
+console.log(validate(1)); // true
+console.log(validate([1, 2, 3])); // false
+console.log(validate({ a: 1 })); // false
 ```
 <a name="module_okay.eq"></a>
 
